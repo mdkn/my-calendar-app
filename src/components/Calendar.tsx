@@ -22,14 +22,17 @@ function Calendar() {
     setCurrentDate(nextMonthDate);
   };
 
+  const currentYear = currentDate.getFullYear()
+  const currentMonth = currentDate.getMonth() + 1
+
   return (
     <div className="calendar">
       <CalendarHeader
-        title={`${currentDate.getFullYear()}/${currentDate.getMonth() + 1}`}
+        title={`${currentYear}/${currentMonth}`}
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
       />
-      <CalendarBody currentDate={currentDate} />
+      <CalendarBody year={currentYear} month={currentMonth} />
     </div>
   );
 }

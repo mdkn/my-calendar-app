@@ -1,19 +1,25 @@
 import React from 'react';
+import Day from './Day';
+import { RootState } from '../store';
+import AddScheduleForm from './ScheduleForm'
+import { useSelector } from 'react-redux';
+import { Schedule } from '../types';
 
 type CalendarBodyProps = {
-  currentDate: Date;
+  year: number;
+  month: number;
 };
 
-function CalendarBody({ currentDate }: CalendarBodyProps) {
+function CalendarBody({ year, month }: CalendarBodyProps) {
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const daysInMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
+    year,
+    month + 1,
     0
   ).getDate();
   const firstDayOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
+    year,
+    month,
     1
   ).getDay();
 
@@ -25,7 +31,7 @@ function CalendarBody({ currentDate }: CalendarBodyProps) {
     allDays.slice(i * 7, i * 7 + 7)
   );
 
-  const today = new Date();
+  const schedules = useSelector((state: RootState) => state.schedule.schedules)
 
   return (
     <div className="calendar-body">
@@ -40,19 +46,8 @@ function CalendarBody({ currentDate }: CalendarBodyProps) {
         <tbody>
           {rows.map((row, i) => (
             <tr key={i}>
-              {row.map((day, j) => (
-                <td
-                  key={j}
-                  className={`${day === null ? 'blank' : ''}${
-                    day === today.getDate() &&
-                    currentDate.getMonth() === today.getMonth() &&
-                    currentDate.getFullYear() === today.getFullYear()
-                      ? ' today'
-                      : ''
-                  }`}
-                >
-                  {day === null ? '' : day}
-                </td>
+              {row.map((day) => (
+                <Day key={day} day={day} month={month} schedules={schedules} />
               ))}
             </tr>
           ))}
